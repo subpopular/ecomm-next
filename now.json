@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "graphql.js",
+      "use": "@now/node-server"
+    },
+    { "src": "next.config.js", "use": "@now/next" }
+  ],
+  "routes": [
+    {
+      "src": "/graphql",
+      "dest": "graphql.js"
+    }
+  ],
+  "name": "ecomm-next",
+  "alias": "ecomm-next"
+}
