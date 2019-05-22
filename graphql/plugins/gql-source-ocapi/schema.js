@@ -72,6 +72,10 @@ exports.resolvers = {
   },
 
   Product: {
+    sku: root => {
+      console.log(root)
+      return 'foo'
+    },
     images: async (root, args, { dataSources }) => {
       let imageGroups = root.image_groups
       if (!imageGroups) {

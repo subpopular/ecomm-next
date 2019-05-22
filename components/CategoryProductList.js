@@ -4,6 +4,7 @@ import { ApolloConsumer, Query } from 'react-apollo'
 import { withRouter } from 'next/router'
 import Link from 'next/link'
 import { useQuery, useMutation } from '../lib/gql'
+import { useESS } from '@64labs/ess'
 import { Box, Text, Flex, Grid, Image } from '@64labs/ui'
 
 const productsQuery = gql`
@@ -35,24 +36,25 @@ const selectProductMutation = gql`
 const ProductItem = ({ product, start, span, col }) => {
   const setSelectedProduct = useMutation(selectProductMutation, { variables: { id: product.id } })
   return (
-    <Flex
-      ess={{
-        flexDirection: 'column',
-        gridColumn: ['auto', `${start[col]} / span ${span[col]}`]
-      }}
-      onClick={setSelectedProduct}
-    >
-      <Box>
-        <Image src={product.images[0].src} width={1335} height={1780} fluid />
-      </Box>
+    <Link href={`/product?id=${product.id}`} prefetch>
+      <Flex
+        as="a"
+        ess={{
+          flexDirection: 'column',
+          gridColumn: ['auto', `${start[col]} / span ${span[col]}`]
+        }}
+        onClick={setSelectedProduct}
+      >
+        <Box>
+          <Image src={product.images[0].src} width={1335} height={1780} fluid />
+        </Box>
 
-      <Flex ess={{ flexDirection: 'column', pt: 2 }}>
-        <Text variant="caption" ess={{ flex: '1 1 0', textTransform: 'capitalize', mb: 1 }}>
-          {product.name}
-        </Text>
-        <Text variant="caption">{product.price}</Text>
+        <Flex ess={{ flexDirection: 'column', pt: 2 }}>
+          <Text ess={{ flex: '1 1 0', textTransform: 'capitalize', mb: 1 }}>{product.name}</Text>
+          <Text>{product.price}</Text>
+        </Flex>
       </Flex>
-    </Flex>
+    </Link>
   )
 }
 
