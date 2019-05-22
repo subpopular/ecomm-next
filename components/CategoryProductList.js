@@ -1,7 +1,7 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { ApolloConsumer, Query } from 'react-apollo'
-import { withRouter } from 'next/router'
+import Router, { withRouter } from 'next/router'
 import Link from 'next/link'
 import { useQuery, useMutation } from '../lib/gql'
 import { useESS } from '@64labs/ess'
@@ -36,7 +36,7 @@ const selectProductMutation = gql`
 const ProductItem = ({ product, start, span, col }) => {
   const setSelectedProduct = useMutation(selectProductMutation, { variables: { id: product.id } })
   return (
-    <Link href={`/product?id=${product.id}`} prefetch>
+    <Link href={`/product?id=${product.id}`}>
       <Flex
         as="a"
         ess={{
@@ -44,6 +44,10 @@ const ProductItem = ({ product, start, span, col }) => {
           gridColumn: ['auto', `${start[col]} / span ${span[col]}`]
         }}
         onClick={setSelectedProduct}
+        onMouseEnter={() => {
+          Router.prefetch(`/product?id=${product.id}`)
+          console.log('prefetching')
+        }}
       >
         <Box>
           <Image src={product.images[0].src} width={1335} height={1780} fluid />
