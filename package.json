@@ -14,7 +14,7 @@
     "apollo-datasource-rest": "^0.3.2",
     "apollo-link-http": "^1.5.11",
     "apollo-link-persisted-queries": "^0.2.2",
-    "apollo-server": "^2.4.8",
+    "apollo-server": "^2.5.0",
     "apollo-server-micro": "^2.5.0",
     "casual": "^1.6.0",
     "cheerio": "^1.0.0-rc.2",

@@ -16,22 +16,21 @@ class LumensAPI extends RESTDataSource {
     )
   }
 
+  async getProducts(ids) {
+    return await this.get(
+      `/products/(${ids.join(
+        ','
+      )})?expand=availability%2Cprices%2Cvariations%2Cpromotions%2Cimages%2Crecommendations%2Clinks%2Cset_products%2Coptions&locale=default&all_images=true`
+    )
+  }
+
   async getCategoryProductList(categoryId) {
     const path = `/product_search?refine=cgid=${categoryId}&start=0&count=40&locale=default`
     return await this.get(path)
   }
 
   async getCategory(id) {
-    let res = await this.get(`/categories/${id}`)
-    if (res.categories) {
-      res = {
-        ...res,
-        categories: {
-          edges: res.categories.map(node => ({ node }))
-        }
-      }
-    }
-    return res
+    return await this.get(`/categories/${id}?levels=3&locale=default`)
   }
 }
 

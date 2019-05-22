@@ -36,14 +36,12 @@ exports.resolvers = {
   Category: {
     url: root => root.c_alternativeUrl,
 
-    categories: async (root, { id }, { dataSources }, info) => {
+    categories: async root => {
       return root.categories
         ? {
-            edges: await Promise.all(
-              root.categories.edges.map(({ node }) => ({
-                node: dataSources.OCAPI.getCategory(node.id)
-              }))
-            )
+            edges: root.categories.map(cat => ({
+              node: cat
+            }))
           }
         : null
     }
@@ -54,32 +52,39 @@ exports.resolvers = {
       return await dataSources.OCAPI.getCategory(root.selected_refinements.cgid)
     },
 
-    products: root => {
-      return root.hits
-        ? {
-            edges: root.hits.map(item => ({
-              node: {
-                id: item.product_id,
-                name: item.product_name,
-                ...item
-              }
-            }))
-          }
-        : null
+    products: async (root, args, { dataSources }) => {
+      if (root.hits) {
+        const { data: products } = await dataSources.OCAPI.getProducts(
+          root.hits.map(p => p.product_id)
+        )
+        return {
+          edges: products.map(item => ({
+            node: {
+              id: item.product_id,
+              name: item.product_name,
+              ...item
+            }
+          }))
+        }
+      }
+      return null
     }
   },
 
   Product: {
     images: async (root, args, { dataSources }) => {
-      if (!root.image_groups) {
+      let imageGroups = root.image_groups
+      if (!imageGroups) {
         const res = await dataSources.OCAPI.getProduct(root.id)
-        return res.image_groups
-          .find(i => i.view_type === 'large')
-          .images.map(img => ({
-            src: img.dis_base_link,
-            alt: img.alt
-          }))
+        imageGroups = res.image_groups
       }
+
+      return imageGroups
+        .find(i => i.view_type === 'large')
+        .images.map(img => ({
+          src: img.dis_base_link,
+          alt: img.alt
+        }))
     }
   }
 }

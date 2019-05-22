@@ -8,28 +8,42 @@ if (!process.browser) {
   global.fetch = fetch
 }
 
+const cache = new InMemoryCache({
+  cacheRedirects: {
+    Query: {
+      getCategory: (_, args, { getCacheKey }) => {
+        return getCacheKey({ __typename: 'Category', id: args.id })
+      },
+      getProduct: (_, args, { getCacheKey }) => {
+        return getCacheKey({ __typename: 'Product', id: args.id })
+      }
+    }
+  }
+})
+
 function create(config = {}, initialState) {
-  return new ApolloClient({
+  const client = new ApolloClient({
     connectToDevTools: process.browser,
     ssrMode: !process.browser,
-    cache: new InMemoryCache({
-      cacheRedirects: {
-        Query: {
-          getCategory: (_, args, { getCacheKey }) => {
-            console.log(args)
-            return getCacheKey({ __typename: 'Category', id: args.id })
-          }
-        },
-        Category: {
-          categories: (root, args) => {
-            console.log('ayyyyy', root)
-            return root
-          }
+    cache: cache.restore(initialState || {}),
+    resolvers: {
+      Mutation: {
+        setSelectedProductId: (_root, variables, { cache, getCacheKey }) => {
+          cache.writeData({ data: { selectedProductId: variables.id } })
+          return null
         }
       }
-    }).restore(initialState || {}),
+    },
     ...config
   })
+
+  cache.writeData({
+    data: {
+      selectedProductId: null
+    }
+  })
+
+  return client
 }
 
 export default function initApollo(clientConfig, initialState) {

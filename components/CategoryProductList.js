@@ -1,8 +1,9 @@
 import React from 'react'
 import gql from 'graphql-tag'
+import { ApolloConsumer, Query } from 'react-apollo'
 import { withRouter } from 'next/router'
 import Link from 'next/link'
-import { useQuery } from '../lib/gql'
+import { useQuery, useMutation } from '../lib/gql'
 import { Box, Text, Flex, Grid, Image } from '@64labs/ui'
 
 const productsQuery = gql`
@@ -24,6 +25,36 @@ const productsQuery = gql`
     }
   }
 `
+
+const selectProductMutation = gql`
+  mutation setSelectedProductId($id: String!) {
+    setSelectedProductId(id: $id) @client
+  }
+`
+
+const ProductItem = ({ product, start, span, col }) => {
+  const setSelectedProduct = useMutation(selectProductMutation, { variables: { id: product.id } })
+  return (
+    <Flex
+      ess={{
+        flexDirection: 'column',
+        gridColumn: ['auto', `${start[col]} / span ${span[col]}`]
+      }}
+      onClick={setSelectedProduct}
+    >
+      <Box>
+        <Image src={product.images[0].src} width={1335} height={1780} fluid />
+      </Box>
+
+      <Flex ess={{ flexDirection: 'column', pt: 2 }}>
+        <Text variant="caption" ess={{ flex: '1 1 0', textTransform: 'capitalize', mb: 1 }}>
+          {product.name}
+        </Text>
+        <Text variant="caption">{product.price}</Text>
+      </Flex>
+    </Flex>
+  )
+}
 
 const ProductList = ({ router: { query } }) => {
   const { data, loading, error } = useQuery(productsQuery, {
@@ -48,9 +79,9 @@ const ProductList = ({ router: { query } }) => {
     <Grid
       ess={{
         gridTemplateColumns: ['repeat(2, 1fr)', 'repeat(21, 1fr)'],
-        gridColumnGap: ['1px', '15px'],
-        gridRowGap: ['1px', '100px'],
-        p: [0, 3]
+        gridColumnGap: ['15px', '15px'],
+        gridRowGap: ['45px', '100px'],
+        p: 3
       }}
     >
       {data.productList.products.edges.map(({ node: product }, i) => {
@@ -59,23 +90,13 @@ const ProductList = ({ router: { query } }) => {
         const span = [5, 5, 5, 10, 5, 5, 5, 5, 5, 5]
 
         return (
-          <Flex
+          <ProductItem
             key={`${product.id}-${i}`}
-            ess={{
-              flexDirection: 'column',
-              gridColumn: `${start[col]} / span ${span[col]}`
-            }}
-          >
-            <Box ess={{ px: [3, 0], pt: [3, 0] }}>
-              <Image src={product.images[0].src} width={1335} height={1780} fluid />
-            </Box>
-            <Flex ess={{ flexDirection: 'column', pt: 2 }}>
-              <Text variant="caption" ess={{ flex: '1 1 0', textTransform: 'capitalize', mb: 1 }}>
-                {product.name}
-              </Text>
-              <Text variant="caption">{product.price}</Text>
-            </Flex>
-          </Flex>
+            product={product}
+            start={start}
+            span={span}
+            col={col}
+          />
         )
       })}
     </Grid>
