@@ -1,10 +1,8 @@
-const { MockList } = require('apollo-server')
-const casual = require('casual')
 const merge = require('lodash/merge')
 const { createSchema } = require('./schemas')
 
 const plugins = {
-  'gql-source-lumens': require('./plugins/gql-source-lumens')
+  'gql-source-ocapi': require('./plugins/gql-source-ocapi')
 }
 
 let typeDefs = []
@@ -43,21 +41,22 @@ module.exports = ApolloServer =>
       }
     },
     introspection: true,
-    tracing: true,
-    cacheControl: { defaultMaxAge: 5 },
-    playground: true,
-    mocks: {
-      ProductList: () => ({
-        edges: () => new MockList([20, 20])
-      }),
-      Product: () => ({
-        id: () => Math.floor(Date.now() * Math.random()),
-        name: casual.title,
-        thumbnail: root => ({
-          src: `https://picsum.photos/300/?random=${root.id()}`
-        }),
-        basePrice: () => `$${casual.double(50, 1500).toFixed(2)}`,
-        brand: casual.company_name
-      })
-    }
+    // tracing: true,
+    // cacheControl: { defaultMaxAge: 5 },
+    playground: true
+    // mocks: {
+    //   ProductList: () => ({
+    //     edges: () => new MockList([20, 20])
+    //   }),
+    //   Product: () => ({
+    //     id: () => Math.floor(Date.now() * Math.random()),
+    //     name: casual.title,
+    //     thumbnail: root => ({
+    //       // src: `https://picsum.photos/300/?random=${root.id()}`
+    //       src: `https://picsum.photos/300`
+    //     }),
+    //     basePrice: () => `$${casual.double(50, 1500).toFixed(2)}`,
+    //     brand: casual.company_name
+    //   })
+    // }
   })

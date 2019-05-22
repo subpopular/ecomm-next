@@ -26,8 +26,8 @@ exports.typeDefs = gql`
   }
 
   extend type Query {
-    getProducts(path: String!): ProductList
-    getProduct(path: String!): Product
+    getProducts(ids: String!): ProductList
+    getProduct(id: String!): Product
   }
 
   ${Image}

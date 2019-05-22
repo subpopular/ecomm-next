@@ -3,6 +3,7 @@ const { makeExecutableSchema } = require('graphql-tools')
 const { merge } = require('lodash')
 const PageInfo = require('./PageInfo.schema')
 const Product = require('./Product.schema')
+const Category = require('./Category.schema')
 const Cart = require('./Cart.schema')
 const NavMenu = require('./NavMenu.schema')
 
@@ -15,7 +16,14 @@ const Query = gql`
   }
 `
 
-const baseTypeDefs = [Query, PageInfo.typeDefs, Product.typeDefs, Cart.typeDefs, NavMenu.typeDefs]
+const baseTypeDefs = [
+  Query,
+  PageInfo.typeDefs,
+  Product.typeDefs,
+  Category.typeDefs,
+  Cart.typeDefs,
+  NavMenu.typeDefs
+]
 const baseResolvers = {}
 
 exports.baseTypeDefs = baseTypeDefs
@@ -26,6 +34,7 @@ exports.createSchema = (extensions = {}) => {
     baseResolvers,
     PageInfo.resolvers,
     Product.resolvers,
+    Category.resolvers,
     Cart.resolvers,
     extensions.resolvers
   )

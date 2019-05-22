@@ -12,7 +12,22 @@ function create(config = {}, initialState) {
   return new ApolloClient({
     connectToDevTools: process.browser,
     ssrMode: !process.browser,
-    cache: new InMemoryCache().restore(initialState || {}),
+    cache: new InMemoryCache({
+      cacheRedirects: {
+        Query: {
+          getCategory: (_, args, { getCacheKey }) => {
+            console.log(args)
+            return getCacheKey({ __typename: 'Category', id: args.id })
+          }
+        },
+        Category: {
+          categories: (root, args) => {
+            console.log('ayyyyy', root)
+            return root
+          }
+        }
+      }
+    }).restore(initialState || {}),
     ...config
   })
 }

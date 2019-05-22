@@ -3,7 +3,7 @@
   "builds": [
     {
       "src": "graphql.js",
-      "use": "@now/node-server"
+      "use": "@now/node"
     },
     { "src": "next.config.js", "use": "@now/next" }
   ],
