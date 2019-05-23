@@ -1,7 +1,7 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { Box, Flex } from '@64labs/ui'
-import { Menu as MenuIcon, ShoppingCartOutlined as CartIcon } from 'material-react-icons'
+import { Menu as MenuIcon, ShoppingCart as CartIcon } from 'material-react-icons'
 import { useQuery } from '../lib/gql'
 import { RootCategoryFragment } from '../lib/fragments'
 import Logo from '../components/Logo'
