@@ -14,7 +14,6 @@ const productQuery = gql`
       id
       name
       price
-      sku
       images {
         src
         alt
@@ -47,7 +46,6 @@ const ProductDetail = ({ router: { query } }) => {
       </Box>
       <Text>{product.name}</Text>
       <Text>{product.price}</Text>
-      <Text>{product.sku}</Text>
     </Box>
   )
 }

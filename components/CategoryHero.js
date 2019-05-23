@@ -37,19 +37,22 @@ const CategoryHero = ({ router: { query } }) => {
     return <div>Error :(</div>
   }
 
+  if (!data.category || !data.category.categories) {
+    return null
+  }
+
   const { category } = data
   const { categories } = category
 
   return (
     <Box p={3} mb={4}>
-      {categories &&
-        categories.edges.map(({ node }) => (
-          <Text as="h3" fontWeight="normal" py={1} key={node.name}>
-            <Link href={`/products?cgid=${node.id}`}>
-              <a>{node.name}</a>
-            </Link>
-          </Text>
-        ))}
+      {categories.edges.map(({ node }) => (
+        <Text as="h3" fontWeight="normal" py={1} key={node.name}>
+          <Link href={`/products?cgid=${node.id}`}>
+            <a>{node.name}</a>
+          </Link>
+        </Text>
+      ))}
     </Box>
   )
 }

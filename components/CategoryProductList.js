@@ -1,11 +1,9 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { ApolloConsumer, Query } from 'react-apollo'
-import Router, { withRouter } from 'next/router'
-import Link from 'next/link'
-import { useQuery, useMutation } from '../lib/gql'
-import { useESS } from '@64labs/ess'
-import { Box, Text, Flex, Grid, Image } from '@64labs/ui'
+import { withRouter } from 'next/router'
+import { useQuery } from '../lib/gql'
+import { Grid } from '@64labs/ui'
+import ProductItem from './ProductItem'
 
 const productsQuery = gql`
   query products($categoryId: String!) {
@@ -27,40 +25,11 @@ const productsQuery = gql`
   }
 `
 
-const selectProductMutation = gql`
+export const selectProductMutation = gql`
   mutation setSelectedProductId($id: String!) {
     setSelectedProductId(id: $id) @client
   }
 `
-
-const ProductItem = ({ product, start, span, col }) => {
-  const setSelectedProduct = useMutation(selectProductMutation, { variables: { id: product.id } })
-  return (
-    <Link href={`/product?id=${product.id}`}>
-      <Flex
-        as="a"
-        ess={{
-          flexDirection: 'column',
-          gridColumn: ['auto', `${start[col]} / span ${span[col]}`]
-        }}
-        onClick={setSelectedProduct}
-        onMouseEnter={() => {
-          Router.prefetch(`/product?id=${product.id}`)
-          console.log('prefetching')
-        }}
-      >
-        <Box>
-          <Image src={product.images[0].src} width={1335} height={1780} fluid />
-        </Box>
-
-        <Flex ess={{ flexDirection: 'column', pt: 2 }}>
-          <Text ess={{ flex: '1 1 0', textTransform: 'capitalize', mb: 1 }}>{product.name}</Text>
-          <Text>{product.price}</Text>
-        </Flex>
-      </Flex>
-    </Link>
-  )
-}
 
 const ProductList = ({ router: { query } }) => {
   const { data, loading, error } = useQuery(productsQuery, {

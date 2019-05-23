@@ -2750,6 +2750,11 @@ emojis-list@^2.0.0:
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-2.1.0.tgz#4daa4d9db00f9819880c79fa457ae5b09a1fd389"
   integrity sha1-TapNnbAPmBmIDHn6RXrlsJof04k=
 
+emotion-icons@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/emotion-icons/-/emotion-icons-1.0.0.tgz#e5cb59200071a35c714d001a745d16d89d6a7f83"
+  integrity sha512-U8z6ePySshpp2Gs6ReK9lkRvK4UlCqSz1HPpOsFD5fPoeAJjYJcEpoZvIGZKBseWhAGP675TQDCakMEjuAGSpg==
+
 emotion-theming@^10.0.9:
   version "10.0.9"
   resolved "https://registry.yarnpkg.com/emotion-theming/-/emotion-theming-10.0.9.tgz#80e9fc40db8c46b466fcc11f3ae076f332933a4e"
@@ -4097,6 +4102,11 @@ material-colors@^1.2.6:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/material-colors/-/material-colors-1.2.6.tgz#6d1958871126992ceecc72f4bcc4d8f010865f46"
   integrity sha512-6qE4B9deFBIa9YSpOc9O0Sgc43zTeVYbgDT5veRKSlB2+ZuHNoVVxA1L/ckMUayV9Ay9y7Z/SZCLcGteW9i7bg==
+
+material-react-icons@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/material-react-icons/-/material-react-icons-4.0.0.tgz#7a4f915677268afa3a06bbdceef642c35fff37e6"
+  integrity sha512-BVShCspF6wao2/B3rn57BhcP8Q8ehu9tMPAY1rKUrPcd8+N2kIS4O18KjlVI4zqHu9eWLi3mFyRl/qdfHXptuQ==
 
 maximatch@^0.1.0:
   version "0.1.0"
