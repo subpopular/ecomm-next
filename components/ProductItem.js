@@ -1,14 +1,22 @@
 import React from 'react'
 import Link from 'next/link'
+import { withRouter } from 'next/router'
 import { useMutation } from '../lib/gql'
 import { Box, Text, Flex, Image, Button } from '@64labs/ui'
 import { KeyboardBackspace as BackArrow } from 'material-react-icons'
 import Modal from './Modal'
 
-const ProductItem = ({ product, start, span, col }) => {
+const ProductItem = ({ product, start, span, col, router }) => {
   const [isModalOpen, setModalState] = React.useState(false)
 
-  const toggleModal = () => setModalState(!isModalOpen)
+  const toggleModal = () => {
+    setModalState(!isModalOpen)
+  }
+
+  const popProductModal = e => {
+    e.preventDefault()
+    setModalState(true)
+  }
 
   return (
     <>
@@ -19,11 +27,7 @@ const ProductItem = ({ product, start, span, col }) => {
             flexDirection: 'column',
             gridColumn: ['auto', `${start[col]} / span ${span[col]}`]
           }}
-          onClick={e => {
-            e.stopPropagation()
-            e.preventDefault()
-            toggleModal()
-          }}
+          onClick={popProductModal}
         >
           <Box>
             <Image src={product.images[0].src} width={1335} height={1780} fluid />
@@ -89,4 +93,4 @@ const ProductItem = ({ product, start, span, col }) => {
   )
 }
 
-export default ProductItem
+export default withRouter(ProductItem)

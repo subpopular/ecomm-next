@@ -29,7 +29,7 @@ const ProductList = () => {
     <>
       <Flex height={40} px={3} ess={{ justifyContent: 'space-between', alignItems: 'center' }}>
         <Box ml={-1}>
-          <MenuIcon styles={{ width: 20, height: 16, verticalAlign: 'initial' }} />
+          <MenuIcon styles={{ width: 20, height: 16, display: 'block' }} />
         </Box>
         <Box
           width={130}
@@ -42,7 +42,7 @@ const ProductList = () => {
           <Logo />
         </Box>
         <Box>
-          <CartIcon styles={{ width: 20, height: 18, verticalAlign: 'initial' }} />
+          <CartIcon styles={{ width: 20, height: 18, display: 'block' }} />
         </Box>
       </Flex>
 
