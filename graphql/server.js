@@ -1,32 +1,28 @@
 const merge = require('lodash/merge')
 const { createSchema } = require('./schemas')
 
-const plugins = {
-  'gql-source-ocapi': require('./plugins/gql-source-ocapi')
-}
+module.exports = (ApolloServer, plugins) => {
+  let typeDefs = []
+  let resolvers = {}
+  let dataSources = {}
 
-let typeDefs = []
-let resolvers = {}
-let dataSources = {}
+  const concatTypeDefs = _typeDefs => (typeDefs = typeDefs.concat(_typeDefs))
+  const mergeResolvers = _resolvers => (resolvers = merge(resolvers, _resolvers))
+  const addDataSource = (dsKey, ds) => (dataSources[dsKey] = ds)
 
-const concatTypeDefs = _typeDefs => (typeDefs = typeDefs.concat(_typeDefs))
-const mergeResolvers = _resolvers => (resolvers = merge(resolvers, _resolvers))
-const addDataSource = (dsKey, ds) => (dataSources[dsKey] = ds)
+  Object.keys(plugins).forEach(key => {
+    const { onCreateSchema, onCreateDataSources } = plugins[key]
+    if (onCreateSchema) {
+      onCreateSchema({ concatTypeDefs, mergeResolvers })
+    }
+    if (onCreateDataSources) {
+      onCreateDataSources({ addDataSource })
+    }
+  })
 
-Object.keys(plugins).forEach(key => {
-  const { onCreateSchema, onCreateDataSources } = plugins[key]
-  if (onCreateSchema) {
-    onCreateSchema({ concatTypeDefs, mergeResolvers })
-  }
-  if (onCreateDataSources) {
-    onCreateDataSources({ addDataSource })
-  }
-})
+  const schema = createSchema({ typeDefs, resolvers })
 
-const schema = createSchema({ typeDefs, resolvers })
-
-module.exports = ApolloServer =>
-  new ApolloServer({
+  return new ApolloServer({
     schema,
     dataSources: () =>
       Object.keys(dataSources).reduce((a, b) => {
@@ -60,3 +56,4 @@ module.exports = ApolloServer =>
     //   })
     // }
   })
+}

@@ -49,7 +49,7 @@ const Modal = ({ isOpen, children }) => {
     if (showModal && !isOpen) {
       setTimeout(() => {
         setShowModal(false)
-      }, 300)
+      }, 500)
     } else if (isOpen && !showModal) {
       setShowModal(true)
     }

@@ -2,6 +2,7 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { withRouter } from 'next/router'
 import { useQuery } from '../lib/gql'
+import { ProductDetailFragment } from '../lib/fragments'
 import { Grid } from '@64labs/ui'
 import ProductItem from './ProductItem'
 
@@ -11,27 +12,16 @@ const productsQuery = gql`
       products {
         edges {
           node {
-            id
-            name
-            price
-            images {
-              src
-              alt
-            }
+            ...ProductDetailFragment
           }
         }
       }
     }
   }
+  ${ProductDetailFragment}
 `
 
-export const selectProductMutation = gql`
-  mutation setSelectedProductId($id: String!) {
-    setSelectedProductId(id: $id) @client
-  }
-`
-
-const ProductList = ({ router: { query } }) => {
+const ProductList = ({ router: { query }, onProductClick }) => {
   const { data, loading, error } = useQuery(productsQuery, {
     variables: {
       categoryId: query.cgid
@@ -71,6 +61,7 @@ const ProductList = ({ router: { query } }) => {
             start={start}
             span={span}
             col={col}
+            onClick={onProductClick}
           />
         )
       })}

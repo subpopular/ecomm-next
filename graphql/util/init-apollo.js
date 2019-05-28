@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache } from 'apollo-boost'
+import { ApolloClient, InMemoryCache, defaultDataIdFromObject } from 'apollo-boost'
 import fetch from 'isomorphic-unfetch'
 
 let apolloClient = null
@@ -9,6 +9,12 @@ if (!process.browser) {
 }
 
 const cache = new InMemoryCache({
+  dataIdFromObject: object => {
+    if (object.__typename === 'VariationAttribute') {
+      return `${object.__typename}:${object.key}`
+    }
+    return defaultDataIdFromObject(object)
+  },
   cacheRedirects: {
     Query: {
       getCategory: (_, args, { getCacheKey }) => {

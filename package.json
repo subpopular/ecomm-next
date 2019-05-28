@@ -7,6 +7,7 @@
     "@64labs/ess": "^1.0.20",
     "@64labs/hooks": "^1.0.20",
     "@64labs/ui": "^1.0.20",
+    "@apollo/react-hooks": "^0.1.0-beta.5",
     "@emotion/babel-preset-css-prop": "^10.0.7",
     "@emotion/core": "^10.0.9",
     "@emotion/styled": "^10.0.9",

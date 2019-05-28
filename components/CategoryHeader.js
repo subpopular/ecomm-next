@@ -5,7 +5,6 @@ import { withRouter } from 'next/router'
 import Link from 'next/link'
 import { Box, Text, Flex, Grid, Button, Image } from '@64labs/ui'
 import { useQuery } from '../lib/gql'
-import ProductMiniDetail from './ProductMiniDetail'
 
 const categoryHeaderQuery = gql`
   query categoryHeader($id: String!) {
@@ -13,7 +12,6 @@ const categoryHeaderQuery = gql`
       id
       name
     }
-    selectedProductId @client
   }
 `
 
@@ -32,7 +30,7 @@ const CategoryHeader = ({ router: { query } }) => {
     return <div>Error :(</div>
   }
 
-  const { category, selectedProductId } = data
+  const { category } = data
 
   return (
     <Box p={3}>
@@ -40,7 +38,6 @@ const CategoryHeader = ({ router: { query } }) => {
         <Box>
           <Text variant="h2">{category.name}</Text>
         </Box>
-        <ProductMiniDetail id={selectedProductId} />
       </Flex>
     </Box>
   )

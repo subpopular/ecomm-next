@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Router, { withRouter } from 'next/router'
 import gql from 'graphql-tag'
-import { Box, Flex } from '@64labs/ui'
-import { Menu as MenuIcon, ShoppingCart as CartIcon } from 'material-react-icons'
 import { useQuery } from '../lib/gql'
 import { RootCategoryFragment } from '../lib/fragments'
+import { Menu as MenuIcon, ShoppingCart as CartIcon } from 'material-react-icons'
+import { Box, Flex } from '@64labs/ui'
 import Logo from '../components/Logo'
 import CategoryHeader from '../components/CategoryHeader'
 import CategoryHero from '../components/CategoryHero'
 import CategoryProductList from '../components/CategoryProductList'
+import ProductDetailModal from '../components/ProductDetailModal'
 
 const categoryProductListQuery = gql`
   query category($id: String!) {
@@ -18,12 +20,28 @@ const categoryProductListQuery = gql`
   ${RootCategoryFragment}
 `
 
-const ProductList = () => {
-  useQuery(categoryProductListQuery, {
-    variables: {
-      id: 'root'
-    }
-  })
+const useProductRouteModal = router => {
+  const [isModalOpen, setModalState] = useState(false)
+  const [prevPathname, setPrevPathname] = useState(router.asPath)
+  const closeModal = () => {
+    setModalState(false)
+    Router.replace(prevPathname)
+  }
+  const openModal = (e, product) => {
+    e.preventDefault()
+    setPrevPathname(router.asPath)
+    setModalState(true)
+    Router.push(`${router.asPath}&pid=${product.id}`, `/product?id=${product.id}`, {
+      shallow: true
+    })
+  }
+  return [isModalOpen, openModal, closeModal]
+}
+
+const ProductList = ({ router }) => {
+  useQuery(categoryProductListQuery, { variables: { id: 'root' } })
+
+  const [isProductModalOpen, openProductModal, closeProductModal] = useProductRouteModal(router)
 
   return (
     <>
@@ -31,14 +49,7 @@ const ProductList = () => {
         <Box ml={-1}>
           <MenuIcon styles={{ width: 20, height: 16, display: 'block' }} />
         </Box>
-        <Box
-          width={130}
-          ess={{
-            '& > svg': {
-              display: 'block'
-            }
-          }}
-        >
+        <Box width={[130, 160]}>
           <Logo />
         </Box>
         <Box>
@@ -49,10 +60,16 @@ const ProductList = () => {
       <Box px={[0, 3]}>
         <CategoryHeader />
         <CategoryHero />
-        <CategoryProductList />
+        <CategoryProductList onProductClick={openProductModal} />
       </Box>
+
+      <ProductDetailModal
+        selectedProductId={router.query.pid}
+        isOpen={isProductModalOpen}
+        close={closeProductModal}
+      />
     </>
   )
 }
 
-export default ProductList
+export default withRouter(ProductList)
