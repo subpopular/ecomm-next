@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Router, { withRouter } from 'next/router'
+import Link from 'next/link'
 import gql from 'graphql-tag'
 import { useQuery } from '../lib/gql'
 import { RootCategoryFragment } from '../lib/fragments'
@@ -53,7 +54,9 @@ const ProductList = ({ router }) => {
           <Logo />
         </Box>
         <Box>
-          <CartIcon styles={{ width: 20, height: 18, display: 'block' }} />
+          <Link href="/cart">
+            <CartIcon styles={{ width: 20, height: 18, display: 'block' }} />
+          </Link>
         </Box>
       </Flex>
 

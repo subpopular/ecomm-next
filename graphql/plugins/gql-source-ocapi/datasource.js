@@ -7,7 +7,77 @@ class LumensAPI extends RESTDataSource {
   }
 
   willSendRequest(request) {
+    if (this.context.token) {
+      request.headers.set('Authorization', this.context.token)
+    }
     request.params.set('client_id', 'a5880415-96c2-4fe1-8d1e-a70a343dfe69')
+  }
+
+  async didReceiveResponse(response, _request) {
+    if (response.ok) {
+      // grab the auth token from the response if it exists and
+      // return it with the response data
+      const token = response.headers.get('authorization')
+      const json = await this.parseBody(response)
+      return token ? { ...json, token } : json
+    } else {
+      throw await this.errorFromResponse(response)
+    }
+  }
+
+  async auth(type = 'guest') {
+    const result = await this.post('/customers/auth', { type })
+    return {
+      id: result.customer_id,
+      type: result.auth_type,
+      locale: result.preferred_locale,
+      token: result.token
+    }
+  }
+
+  async createCustomerCart({ token }) {
+    return await this.post(
+      `/baskets`,
+      {},
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    )
+  }
+
+  async getCustomerCart({ id, token }) {
+    return await this.get(
+      `/baskets/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    )
+  }
+
+  async getCustomerCarts({ id, token }) {
+    return await this.get(
+      `/customers/${id}/baskets`,
+      {},
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    )
+  }
+
+  async addToCart({ basketId, productId, quantity }) {
+    return await this.post(`/baskets/${basketId}/items`, [
+      {
+        product_id: productId,
+        quantity: quantity || 1
+      }
+    ])
   }
 
   async getProduct(id) {

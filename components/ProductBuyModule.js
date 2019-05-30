@@ -1,56 +1,51 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { Grid, Button, Icon, Box, Flex, Text, Image } from '@64labs/ui'
+import gql from 'graphql-tag'
+import { useQuery, useMutation } from '../lib/gql'
+import { Button, Icon, Box, Flex, Text, Image } from '@64labs/ui'
+import VariationSelector from './VariationSelector'
+import SelectorGrid from './SelectorGrid'
 
-const VariationSelector = ({ value, selected, disabled, onSelect, children }) => {
-  return (
-    <Flex
-      ess={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 32,
-        cursor: 'default'
-      }}
-      onClick={() => !disabled && onSelect(value)}
-    >
-      <Box
-        ess={{
-          opacity: disabled ? 0.5 : 1,
-          position: 'relative',
-          '&:after': selected
-            ? {
-                content: '""',
-                display: 'block',
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                height: '6px',
-                borderBottom: '1px solid black'
-              }
-            : {}
-        }}
-      >
-        {children}
-      </Box>
-    </Flex>
-  )
-}
+const GET_CART_QUERY = gql`
+  query GetCart {
+    user {
+      id
+      cart {
+        id
+        items {
+          id
+        }
+      }
+    }
+  }
+`
 
-const SelectorGrid = ({ children }) => (
-  <Grid
-    ess={{
-      flex: '1 1 0',
-      gridTemplateColumns: ['auto', 'repeat(auto-fill, minmax(40px, 1fr))'],
-      gridColumnGap: '5px',
-      gridRowGap: '10px'
-    }}
-  >
-    {children}
-  </Grid>
-)
+const ADD_TO_CART_MUTATION = gql`
+  mutation AddToCart($basketId: String!, $productId: String!, $quantity: Int) {
+    addToCart(basketId: $basketId, productId: $productId, quantity: $quantity) {
+      id
+      items {
+        id
+      }
+    }
+  }
+`
 
 const ProductBuyModule = ({ product, selections, variant }) => {
+  const cartQuery = useQuery(GET_CART_QUERY)
+  const addToCartMutation = useMutation(ADD_TO_CART_MUTATION)
+  const {
+    data: { user }
+  } = cartQuery
   const { size, color } = selections
   const price = variant ? variant.pricing.max.toFixed(2) : product.price
+
+  const addToCart = productId =>
+    addToCartMutation({
+      variables: {
+        basketId: user.cart.id,
+        productId
+      }
+    })
 
   return (
     <Fragment>
@@ -80,7 +75,7 @@ const ProductBuyModule = ({ product, selections, variant }) => {
                 selected={c.id === color.value}
                 onSelect={color.setColor}
               >
-                <Box ess={{ borderRadius: '50%', overflow: 'hidden', height: 15, width: 15 }}>
+                <Box ess={{ borderRadius: '50%', overflow: 'hidden', height: 13, width: 13 }}>
                   <Image
                     src={c.swatch.image.src}
                     alt={c.swatch.image.alt}
@@ -123,7 +118,12 @@ const ProductBuyModule = ({ product, selections, variant }) => {
       </Box>
 
       <Flex mb={3}>
-        <Button ml={[0, 'auto']} width="100%">
+        <Button
+          ml={[0, 'auto']}
+          width="100%"
+          disabled={!variant}
+          onClick={() => addToCart(variant.id)}
+        >
           Add
         </Button>
       </Flex>

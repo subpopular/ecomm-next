@@ -16,6 +16,7 @@ exports.typeDefs = gql`
   }
 
   type Cart {
+    id: ID!
     items: [CartItem]!
   }
 

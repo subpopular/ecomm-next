@@ -33,7 +33,7 @@ module.exports = (ApolloServer, plugins) => {
       }, {}),
     context: ({ req, res }) => {
       return {
-        cookie: req.headers['x-cookie-payload']
+        token: req.headers['authorization']
       }
     },
     introspection: true,

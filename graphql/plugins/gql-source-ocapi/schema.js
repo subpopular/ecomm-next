@@ -51,23 +51,74 @@ exports.typeDefs = gql`
     parentCategoryId: String
   }
 
+  type User {
+    id: ID!
+    type: String
+    locale: String
+    token: String
+    cart: Cart
+  }
+
   extend type Query {
+    user: User
     getCategoryProductList(categoryId: String!): CategoryProductList
+  }
+
+  extend type Mutation {
+    addToCart(basketId: String!, productId: String!, quantity: Int): Cart
   }
 `
 
 exports.resolvers = {
   Query: {
-    getProduct: async (root, { id }, { dataSources }, info) => {
+    user: async (root, args, { dataSources, ...context }) => {
+      return await dataSources.OCAPI.auth()
+    },
+
+    getProduct: async (root, { id }, { dataSources }) => {
       return await dataSources.OCAPI.getProduct(id)
     },
 
-    getCategory: async (root, { id }, { dataSources }, info) => {
+    getCategory: async (root, { id }, { dataSources }) => {
       return await dataSources.OCAPI.getCategory(id)
     },
 
-    getCategoryProductList: async (root, { categoryId }, { dataSources }, info) => {
+    getCategoryProductList: async (root, { categoryId }, { dataSources }) => {
       return await dataSources.OCAPI.getCategoryProductList(categoryId)
+    }
+  },
+
+  Mutation: {
+    addToCart: async (root, variables, { dataSources }) => {
+      try {
+        const res = await dataSources.OCAPI.addToCart(variables)
+        return res
+      } catch (err) {
+        console.log(err)
+      }
+      return null
+    }
+  },
+
+  Cart: {
+    id: root => root.basket_id,
+    items: root => {
+      console.log(root)
+      return root.product_items
+        ? root.product_items.map(item => ({
+            id: item.product_id
+          }))
+        : []
+    }
+  },
+
+  User: {
+    cart: async (root, variables, { dataSources }) => {
+      const cartsResult = await dataSources.OCAPI.getCustomerCarts(root)
+      if (cartsResult.baskets && cartsResult.baskets[0]) {
+        return await dataSources.OCAPI.getCustomerCart(root)
+      }
+      return await dataSources.OCAPI.createCustomerCart(root)
     }
   },
 
