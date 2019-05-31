@@ -40,15 +40,22 @@ exports.typeDefs = gql`
     color: String
     size: String
     orderable: Boolean
+    productDetail: Product
   }
 
   extend type Product {
     variationAttributes: VariationAttributes
     variants: [ProductVariant]
+    color: String
+    size: String
   }
 
   extend type Category {
     parentCategoryId: String
+  }
+
+  extend type CartItem {
+    product: Product
   }
 
   type User {
@@ -72,7 +79,8 @@ exports.typeDefs = gql`
 exports.resolvers = {
   Query: {
     user: async (root, args, { dataSources, ...context }) => {
-      return await dataSources.OCAPI.auth()
+      const { token } = context
+      return await dataSources.OCAPI.auth(token ? 'refresh' : 'guest')
     },
 
     getProduct: async (root, { id }, { dataSources }) => {
@@ -101,9 +109,8 @@ exports.resolvers = {
   },
 
   Cart: {
-    id: root => root.basket_id,
+    id: root => console.log(root) || root.basket_id,
     items: root => {
-      console.log(root)
       return root.product_items
         ? root.product_items.map(item => ({
             id: item.product_id
@@ -112,11 +119,18 @@ exports.resolvers = {
     }
   },
 
+  CartItem: {
+    product: async (root, variables, { dataSources }) => {
+      return await dataSources.OCAPI.getProduct(root.id)
+    }
+  },
+
   User: {
     cart: async (root, variables, { dataSources }) => {
       const cartsResult = await dataSources.OCAPI.getCustomerCarts(root)
       if (cartsResult.baskets && cartsResult.baskets[0]) {
-        return await dataSources.OCAPI.getCustomerCart(root)
+        const basketId = cartsResult.baskets[0].basket_id
+        return await dataSources.OCAPI.getCustomerCart({ basketId, ...root })
       }
       return await dataSources.OCAPI.createCustomerCart(root)
     }
@@ -124,6 +138,10 @@ exports.resolvers = {
 
   Category: {
     url: root => root.c_alternativeUrl,
+
+    parentCategory: async (root, variables, { dataSources }) => {
+      return await dataSources.OCAPI.getCategory(root.parent_category_id)
+    },
 
     categories: async root => {
       return root.categories
@@ -161,8 +179,11 @@ exports.resolvers = {
   },
 
   Product: {
-    sku: root => {
-      return 'foo'
+    color: root => root.c_color,
+    size: root => root.c_size,
+
+    category: async (root, variables, { dataSources }) => {
+      return await dataSources.OCAPI.getCategory(root.primary_category_id)
     },
 
     variationAttributes: root => {
@@ -246,6 +267,12 @@ exports.resolvers = {
           src: img.dis_base_link,
           alt: img.alt
         }))
+    }
+  },
+
+  ProductVariant: {
+    productDetail: async (root, variables, { dataSources }) => {
+      return await dataSources.OCAPI.getProduct(root.id)
     }
   }
 }

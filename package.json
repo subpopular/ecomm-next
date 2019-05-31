@@ -40,6 +40,8 @@
     "material-colors": "^1.2.6",
     "material-react-icons": "^4.0.0",
     "merge-deep": "^3.0.2",
+    "micro": "^9.3.4",
+    "micro-cors": "^0.1.1",
     "next": "^8.0.3",
     "nodemon": "^1.18.10",
     "react": "^16.8.3",

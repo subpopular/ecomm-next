@@ -1,14 +1,22 @@
 import { gql, useQuery } from '../lib/gql'
 import { Box, Text, Flex, Image } from '@64labs/ui'
 
-const Cart = () => {
-  const { data, error, loading } = useQuery(gql`
-    query GetCart {
-      cart @client {
-        items
+const GET_CART_QUERY = gql`
+  query GetCart {
+    user {
+      id
+      cart {
+        id
+        items {
+          id
+        }
       }
     }
-  `)
+  }
+`
+
+const Cart = () => {
+  const { data, error, loading } = useQuery(GET_CART_QUERY)
 
   if (loading) {
     return <div>Loading...</div>
@@ -21,9 +29,9 @@ const Cart = () => {
   return (
     <Box>
       <Text>Cart</Text>
-      {data.cart.items.map(item => (
+      {data.user.cart.items.map(item => (
         <Flex key={item}>
-          <Text>{item}</Text>
+          <Text>{item.id}</Text>
         </Flex>
       ))}
     </Box>

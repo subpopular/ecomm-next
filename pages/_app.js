@@ -9,8 +9,9 @@ import { ThemeProvider } from 'emotion-theming'
 import { useQuery } from '../lib/gql'
 import apollo from '../graphql/apollo'
 import theme, { GlobalStyle } from '../lib/theme'
+import { addResolveFunctionsToSchema } from 'graphql-tools'
 
-const userQuery = gql`
+const USER_AUTH_QUERY = gql`
   query UserQuery {
     user {
       id
@@ -28,13 +29,20 @@ const userQuery = gql`
 `
 
 const AuthComponent = ({ Component, ...props }) => {
-  const { data } = useQuery(userQuery, { ssr: false })
+  const { data, error, refetch } = useQuery(USER_AUTH_QUERY, { ssr: false })
 
   useEffect(() => {
     if (data && data.user) {
       localStorage.setItem('ae_token', data.user.token)
     }
-  }, [data])
+    if (error) {
+      const { code } = error.graphQLErrors[0].extensions
+      if (code === 'UNAUTHENTICATED') {
+        localStorage.removeItem('ae_token')
+        refetch()
+      }
+    }
+  }, [data, error])
 
   return <Component {...props} />
 }

@@ -4,9 +4,8 @@ import Link from 'next/link'
 import gql from 'graphql-tag'
 import { useQuery } from '../lib/gql'
 import { RootCategoryFragment } from '../lib/fragments'
-import { Menu as MenuIcon, ShoppingCart as CartIcon } from 'material-react-icons'
-import { Box, Flex } from '@64labs/ui'
-import Logo from '../components/Logo'
+import { Box } from '@64labs/ui'
+import Layout from '../components/Layout'
 import CategoryHeader from '../components/CategoryHeader'
 import CategoryHero from '../components/CategoryHero'
 import CategoryProductList from '../components/CategoryProductList'
@@ -45,21 +44,7 @@ const ProductList = ({ router }) => {
   const [isProductModalOpen, openProductModal, closeProductModal] = useProductRouteModal(router)
 
   return (
-    <>
-      <Flex height={40} px={3} ess={{ justifyContent: 'space-between', alignItems: 'center' }}>
-        <Box ml={-1}>
-          <MenuIcon styles={{ width: 20, height: 16, display: 'block' }} />
-        </Box>
-        <Box width={[130, 160]}>
-          <Logo />
-        </Box>
-        <Box>
-          <Link href="/cart">
-            <CartIcon styles={{ width: 20, height: 18, display: 'block' }} />
-          </Link>
-        </Box>
-      </Flex>
-
+    <Layout>
       <Box px={[0, 3]}>
         <CategoryHeader />
         <CategoryHero />
@@ -71,7 +56,7 @@ const ProductList = ({ router }) => {
         isOpen={isProductModalOpen}
         close={closeProductModal}
       />
-    </>
+    </Layout>
   )
 }
 

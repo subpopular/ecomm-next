@@ -13,6 +13,7 @@ exports.typeDefs = gql`
     id: ID!
     name: String!
     url: String!
+    parentCategory: Category
     categories: CategoryList
   }
 

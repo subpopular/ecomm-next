@@ -47,9 +47,9 @@ class LumensAPI extends RESTDataSource {
     )
   }
 
-  async getCustomerCart({ id, token }) {
+  async getCustomerCart({ basketId, token }) {
     return await this.get(
-      `/baskets/${id}`,
+      `/baskets/${basketId}`,
       {},
       {
         headers: {
