@@ -13,7 +13,7 @@ const ModalPortal = ({ isOpen, children }) => {
     }
   })
   return (
-    <Flex variant="cover" position="fixed">
+    <Flex variant="cover" position="fixed" ess={{ zIndex: 99 }}>
       <animated.div
         style={{
           position: 'fixed',

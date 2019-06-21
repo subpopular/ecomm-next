@@ -33,7 +33,7 @@ const CategoryHeader = ({ router: { query } }) => {
   const { category } = data
 
   return (
-    <Box p={3}>
+    <Box px={3} py={4}>
       <Flex ess={{ alignItems: 'center', justifyContent: 'space-between' }}>
         <Box>
           <Text variant="h2">{category.name}</Text>

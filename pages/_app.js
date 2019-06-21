@@ -28,7 +28,7 @@ const USER_AUTH_QUERY = gql`
   }
 `
 
-const AuthComponent = ({ Component, ...props }) => {
+const Root = ({ Component, ...props }) => {
   const { data, error, refetch } = useQuery(USER_AUTH_QUERY, { ssr: false })
 
   useEffect(() => {
@@ -64,7 +64,7 @@ class AppWrapper extends App {
                   />
                 </Head>
                 <GlobalStyle />
-                <AuthComponent Component={Component} {...pageProps} />
+                <Root Component={Component} {...pageProps} />
               </>
             </ThemeProvider>
           </ApolloProvider>

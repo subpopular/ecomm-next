@@ -22,11 +22,21 @@ const cache = new InMemoryCache({
   cacheRedirects: {
     Query: {
       getCategory: (_, args, { getCacheKey }) => {
+        console.log(_, args)
         return getCacheKey({ __typename: 'Category', id: args.id })
       },
       getProduct: (_, args, { getCacheKey }) => {
         return getCacheKey({ __typename: 'Product', id: args.id })
       }
+    },
+    Product: {
+      category: _ => {
+        console.log('WTF')
+      }
+    },
+    Category: {
+      id: () => console.log('id'),
+      name: () => console.log('id')
     }
   }
 })

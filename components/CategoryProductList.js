@@ -22,21 +22,23 @@ const productsQuery = gql`
 `
 
 const ProductList = ({ router: { query }, onProductClick }) => {
-  const { data, loading, error } = useQuery(productsQuery, {
+  const { data, loading, error, ...rest } = useQuery(productsQuery, {
     variables: {
       categoryId: query.cgid
-    }
+    },
+    returnPartialData: true,
+    errorPolicy: 'all'
   })
 
   if (loading) {
     return <div>Loading.......</div>
   }
 
-  if (error) {
+  if (error && !data) {
     return <div>Error :(</div>
   }
 
-  if (!data.productList.products) {
+  if (!data || !data.productList || !data.productList.products) {
     return <div>No products here</div>
   }
 

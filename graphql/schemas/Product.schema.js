@@ -15,6 +15,7 @@ exports.typeDefs = gql`
     name: String!
     path: String
     description: String
+    categoryId: String
     category: Category
     price: Float
     sku: String

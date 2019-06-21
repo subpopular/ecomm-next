@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import { useESS } from '@64labs/ess'
 import { Box, Text, Flex, Image, Button } from '@64labs/ui'
 import { useProductSelections } from '../lib/hooks/useProductDetail'
 
@@ -13,16 +14,17 @@ const ProductItem = ({ product, start, span, col, onClick, router }) => {
   const images = selectedColorVariant && selectedColorVariant.images
 
   return (
-    <>
+    <Box
+      ess={{
+        gridColumn: ['auto', `${start[col]} / span ${span[col]}`],
+        '& > a': {
+          display: 'flex',
+          flexDirection: 'column'
+        }
+      }}
+    >
       <Link href={`/product?id=${product.id}`} prefetch>
-        <Flex
-          as="a"
-          ess={{
-            flexDirection: 'column',
-            gridColumn: ['auto', `${start[col]} / span ${span[col]}`]
-          }}
-          onClick={e => onClick(e, product)}
-        >
+        <a onClick={e => onClick(e, product)}>
           <Box>
             <Image src={images && images[0].src} width={1335} height={1780} fluid />
           </Box>
@@ -31,9 +33,9 @@ const ProductItem = ({ product, start, span, col, onClick, router }) => {
             <Text ess={{ flex: '1 1 0', textTransform: 'capitalize', mb: 1 }}>{product.name}</Text>
             <Text>{product.price}</Text>
           </Flex>
-        </Flex>
+        </a>
       </Link>
-    </>
+    </Box>
   )
 }
 

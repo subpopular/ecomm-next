@@ -9,11 +9,14 @@ const ProductBuyModule = ({ product, selections, variant }) => {
   const { size, color } = selections
   const price = variant ? variant.pricing.max.toFixed(2) : product.price.toFixed(2)
 
+  const categoryName = product.category ? product.category.name : null
+  const parentCategoryName = categoryName ? product.category.parentCategory.name : null
+
   return (
     <>
       <Box mb={3}>
         <Text mb={2} variant="caption">
-          {product.category.parentCategory.name} – {product.category.name}
+          {parentCategoryName} – {categoryName}
         </Text>
         <Text as="h1" variant="h2" mb={1}>
           {product.name}

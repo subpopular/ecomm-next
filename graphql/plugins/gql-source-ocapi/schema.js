@@ -109,7 +109,7 @@ exports.resolvers = {
   },
 
   Cart: {
-    id: root => console.log(root) || root.basket_id,
+    id: root => root.basket_id,
     items: root => {
       return root.product_items
         ? root.product_items.map(item => ({
@@ -139,8 +139,25 @@ exports.resolvers = {
   Category: {
     url: root => root.c_alternativeUrl,
 
+    name: async (root, variables, { dataSources }) => {
+      if (root.name) {
+        return root.name
+      }
+      if (root.id === 'root') {
+        return 'root'
+      }
+      return (await dataSources.OCAPI.getCategory(root.id)).name
+    },
+
     parentCategory: async (root, variables, { dataSources }) => {
-      return await dataSources.OCAPI.getCategory(root.parent_category_id)
+      let parentCategoryId = root.parent_category_id
+
+      if (!parentCategoryId) {
+        const { parent_category_id } = await dataSources.OCAPI.getCategory(root.id)
+        parentCategoryId = parent_category_id
+      }
+
+      return await dataSources.OCAPI.getCategory(parentCategoryId)
     },
 
     categories: async root => {
@@ -183,7 +200,7 @@ exports.resolvers = {
     size: root => root.c_size,
 
     category: async (root, variables, { dataSources }) => {
-      return await dataSources.OCAPI.getCategory(root.primary_category_id)
+      return { id: root.primary_category_id }
     },
 
     variationAttributes: root => {
