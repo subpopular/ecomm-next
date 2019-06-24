@@ -1494,6 +1494,24 @@ apollo-graphql@^0.2.1-alpha.1:
     apollo-env "0.4.1-register.1"
     lodash.sortby "^4.7.0"
 
+apollo-link-batch-http@^1.2.12:
+  version "1.2.12"
+  resolved "https://registry.yarnpkg.com/apollo-link-batch-http/-/apollo-link-batch-http-1.2.12.tgz#5c090b6300cf56695751d2246079c2f7d7b9c0f9"
+  integrity sha512-nyhogmcsVa24gpEw0vnHpquf2cANp/xMncs7F6cJzKBzDCvjp80yfhbrQSDqYocdQw4VjeDPCOoz4cqEH8r1TA==
+  dependencies:
+    apollo-link "^1.2.12"
+    apollo-link-batch "^1.1.13"
+    apollo-link-http-common "^0.2.14"
+    tslib "^1.9.3"
+
+apollo-link-batch@^1.1.13:
+  version "1.1.13"
+  resolved "https://registry.yarnpkg.com/apollo-link-batch/-/apollo-link-batch-1.1.13.tgz#cc73cb59d994c41b1c657b597ed95393bc3bb2d6"
+  integrity sha512-Be/kQfY1KcXuSNk0MYdbFqOv8LtLkNgJcO96ynwu6geNiO2rPUi4rn8wjbc2YRwnJ3Qjy95YRbxr+O8gfpT/vw==
+  dependencies:
+    apollo-link "^1.2.12"
+    tslib "^1.9.3"
+
 apollo-link-context@^1.0.17:
   version "1.0.17"
   resolved "https://registry.yarnpkg.com/apollo-link-context/-/apollo-link-context-1.0.17.tgz#439272cfb43ec1891506dd175ed907845b7de36c"
@@ -1508,6 +1526,14 @@ apollo-link-dedup@^1.0.0:
   integrity sha512-14/+Tg7ogcYVrvZa8C7uBQIvX2B/dCKSnojI41yDYGp/t2eWD5ITCWdgjhciXpi0Ij6z+NRyMEebACz3EOwm4w==
   dependencies:
     apollo-link "^1.2.8"
+
+apollo-link-dedup@^1.0.19:
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/apollo-link-dedup/-/apollo-link-dedup-1.0.19.tgz#f0f58312c80b9bf0d927a53d5cad56875c679e14"
+  integrity sha512-7dUiOLAcTlnYcRsUc77s7W9ps1A86JWmrx/Un/6K3xiQkDS3IER5CsujWuAOUtWbP72yp18jEhlyHcslpkJwkg==
+  dependencies:
+    apollo-link "^1.2.12"
+    tslib "^1.9.3"
 
 apollo-link-error@^1.0.3:
   version "1.1.7"
@@ -1531,6 +1557,15 @@ apollo-link-http-common@^0.2.13:
   dependencies:
     apollo-link "^1.2.11"
     ts-invariant "^0.3.2"
+    tslib "^1.9.3"
+
+apollo-link-http-common@^0.2.14:
+  version "0.2.14"
+  resolved "https://registry.yarnpkg.com/apollo-link-http-common/-/apollo-link-http-common-0.2.14.tgz#d3a195c12e00f4e311c417f121181dcc31f7d0c8"
+  integrity sha512-v6mRU1oN6XuX8beVIRB6OpF4q1ULhSnmy7ScnHnuo1qV6GaFmDcbdvXqxIkAV1Q8SQCo2lsv4HeqJOWhFfApOg==
+  dependencies:
+    apollo-link "^1.2.12"
+    ts-invariant "^0.4.0"
     tslib "^1.9.3"
 
 apollo-link-http@^1.3.1:
@@ -1558,7 +1593,7 @@ apollo-link-persisted-queries@^0.2.2:
     apollo-link "^1.2.1"
     hash.js "^1.1.3"
 
-apollo-link@^1.0.0:
+apollo-link@^1.0.0, apollo-link@^1.2.12:
   version "1.2.12"
   resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.12.tgz#014b514fba95f1945c38ad4c216f31bcfee68429"
   integrity sha512-fsgIAXPKThyMVEMWQsUN22AoQI+J/pVXcjRGAShtk97h7D8O+SPskFinCGEkxPeQpE83uKaqafB2IyWdjN+J3Q==
@@ -2628,6 +2663,11 @@ cyclist@~0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-0.2.2.tgz#1b33792e11e914a2fd6d6ed6447464444e5fa640"
   integrity sha1-GzN5LhHpFKL9bW7WRHRkRE5fpkA=
+
+dataloader@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/dataloader/-/dataloader-1.4.0.tgz#bca11d867f5d3f1b9ed9f737bd15970c65dff5c8"
+  integrity sha512-68s5jYdlvasItOJnCuI2Q9s4q98g0pCyL3HrcKJu8KNugUl8ahgmZYg38ysLTgQjjXX3H8CJLkAvWrclWfcalw==
 
 date-now@^0.1.4:
   version "0.1.4"
@@ -5526,6 +5566,11 @@ requires-port@^1.0.0:
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
 
+resize-observer-polyfill@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
+  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
+
 resolve-from@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-3.0.0.tgz#b22c7af7d9d6881bc8b6e653335eebcb0a188748"
@@ -6427,6 +6472,13 @@ url@0.11.0, url@^0.11.0:
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
+
+use-measure@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/use-measure/-/use-measure-0.2.2.tgz#85c44db20bf6173c945ea783fb403b449318ecd8"
+  integrity sha512-fGRxuhsp6/IUP92bypIt6PzTklCpaZiAuaHgs3LPV5KLF8kWdfP5cAuD01rHR4VgPDEMLBlojxZnTalsqfbo+g==
+  dependencies:
+    resize-observer-polyfill "^1.5.1"
 
 use@^3.1.0:
   version "3.1.1"

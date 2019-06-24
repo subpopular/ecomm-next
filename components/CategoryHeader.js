@@ -7,10 +7,18 @@ import { Box, Text, Flex, Grid, Button, Image } from '@64labs/ui'
 import { useQuery } from '../lib/gql'
 
 const categoryHeaderQuery = gql`
-  query categoryHeader($id: String!) {
+  query category($id: String!) {
     category: getCategory(id: $id) {
       id
       name
+      categories {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
     }
   }
 `

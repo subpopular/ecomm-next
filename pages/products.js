@@ -3,22 +3,12 @@ import Router, { withRouter } from 'next/router'
 import Link from 'next/link'
 import gql from 'graphql-tag'
 import { useQuery } from '../lib/gql'
-import { RootCategoryFragment } from '../lib/fragments'
 import { Box } from '@64labs/ui'
 import Layout from '../components/Layout'
 import CategoryHeader from '../components/CategoryHeader'
 import CategoryHero from '../components/CategoryHero'
 import CategoryProductList from '../components/CategoryProductList'
 import ProductDetailModal from '../components/ProductDetailModal'
-
-const categoryProductListQuery = gql`
-  query category($id: String!) {
-    category: getCategory(id: $id) {
-      ...RootCategoryFragment
-    }
-  }
-  ${RootCategoryFragment}
-`
 
 const useProductRouteModal = router => {
   const [isModalOpen, setModalState] = useState(false)
@@ -39,8 +29,6 @@ const useProductRouteModal = router => {
 }
 
 const ProductList = ({ router }) => {
-  useQuery(categoryProductListQuery, { variables: { id: 'root' } })
-
   const [isProductModalOpen, openProductModal, closeProductModal] = useProductRouteModal(router)
 
   return (

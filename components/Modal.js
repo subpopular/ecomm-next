@@ -22,7 +22,7 @@ const ModalPortal = ({ isOpen, children }) => {
           bottom: 0,
           left: 0,
           zIndex: 1,
-          background: 'rgba(0,0,0,0.7)',
+          background: 'rgba(255,255,255,0.8)',
           opacity
         }}
       />

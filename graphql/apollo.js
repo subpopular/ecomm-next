@@ -1,11 +1,12 @@
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
+import { BatchHttpLink } from 'apollo-link-batch-http'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createPersistedQueryLink } from 'apollo-link-persisted-queries'
 import withApolloClient from './util/with-apollo-client'
 
-const httpLink = createHttpLink({
+const httpLink = new BatchHttpLink({
   uri:
     process.env.NODE_ENV === 'production'
       ? 'https://ecomm-next.now.sh/graphql'

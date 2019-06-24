@@ -1,6 +1,25 @@
 const merge = require('lodash/merge')
 const { createSchema } = require('./schemas')
 
+class BabyCache {
+  constructor() {
+    this.cache = {}
+  }
+  get(key) {
+    console.log('GETTING!', key)
+    const result = this.cache[key]
+    if (result) {
+      console.log('HIT HIT HIT')
+    }
+    return Promise.resolve(result)
+  }
+  set(key, value, options) {
+    console.log('SETTING!', key)
+    this.cache[key] = value
+    return Promise.resolve()
+  }
+}
+
 module.exports = (ApolloServer, plugins) => {
   let typeDefs = []
   let resolvers = {}

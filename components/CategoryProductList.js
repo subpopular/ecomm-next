@@ -26,7 +26,6 @@ const ProductList = ({ router: { query }, onProductClick }) => {
     variables: {
       categoryId: query.cgid
     },
-    returnPartialData: true,
     errorPolicy: 'all'
   })
 

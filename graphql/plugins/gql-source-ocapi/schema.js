@@ -1,5 +1,7 @@
 const gql = require('graphql-tag')
 
+const k = key => obj => obj[key]
+
 exports.typeDefs = gql`
   type CategoryProductList {
     count: Int!
@@ -78,45 +80,29 @@ exports.typeDefs = gql`
 
 exports.resolvers = {
   Query: {
-    user: async (root, args, { dataSources, ...context }) => {
-      const { token } = context
-      return await dataSources.OCAPI.auth(token ? 'refresh' : 'guest')
-    },
+    user: async (root, args, { dataSources, ...context }) =>
+      dataSources.OCAPI.auth(context.token ? 'refresh' : 'guest'),
 
-    getProduct: async (root, { id }, { dataSources }) => {
-      return await dataSources.OCAPI.getProduct(id)
-    },
+    getProduct: (root, { id }, { dataSources }) => dataSources.OCAPI.getProduct(id),
 
-    getCategory: async (root, { id }, { dataSources }) => {
-      return await dataSources.OCAPI.getCategory(id)
-    },
+    getCategory: (root, { id }, { dataSources }) => dataSources.OCAPI.getCategory(id),
 
-    getCategoryProductList: async (root, { categoryId }, { dataSources }) => {
-      return await dataSources.OCAPI.getCategoryProductList(categoryId)
-    }
+    getCategoryProductList: (root, { categoryId }, { dataSources }) =>
+      dataSources.OCAPI.getCategoryProductList(categoryId)
   },
 
   Mutation: {
-    addToCart: async (root, variables, { dataSources }) => {
-      try {
-        const res = await dataSources.OCAPI.addToCart(variables)
-        return res
-      } catch (err) {
-        console.log(err)
-      }
-      return null
-    }
+    addToCart: (root, variables, { dataSources }) => dataSources.OCAPI.addToCart(variables)
   },
 
   Cart: {
-    id: root => root.basket_id,
-    items: root => {
-      return root.product_items
+    id: k('basket_id'),
+    items: root =>
+      root.product_items
         ? root.product_items.map(item => ({
             id: item.product_id
           }))
         : []
-    }
   },
 
   CartItem: {
@@ -137,7 +123,7 @@ exports.resolvers = {
   },
 
   Category: {
-    url: root => root.c_alternativeUrl,
+    url: k('c_alternativeUrl'),
 
     name: async (root, variables, { dataSources }) => {
       if (root.name) {
@@ -152,12 +138,14 @@ exports.resolvers = {
     parentCategory: async (root, variables, { dataSources }) => {
       let parentCategoryId = root.parent_category_id
 
-      if (!parentCategoryId) {
-        const { parent_category_id } = await dataSources.OCAPI.getCategory(root.id)
-        parentCategoryId = parent_category_id
-      }
+      return parentCategoryId ? { id: parentCategoryId } : null
 
-      return await dataSources.OCAPI.getCategory(parentCategoryId)
+      // if (!parentCategoryId) {
+      //   const { parent_category_id } = await dataSources.OCAPI.getCategory(root.id)
+      //   parentCategoryId = parent_category_id
+      // }
+
+      // return await dataSources.OCAPI.getCategory(parentCategoryId)
     },
 
     categories: async root => {
@@ -196,11 +184,12 @@ exports.resolvers = {
   },
 
   Product: {
-    color: root => root.c_color,
-    size: root => root.c_size,
+    color: k('c_color'),
+
+    size: k('c_size'),
 
     category: async (root, variables, { dataSources }) => {
-      return { id: root.primary_category_id }
+      return root.primary_category_id ? { id: root.primary_category_id } : null
     },
 
     variationAttributes: root => {

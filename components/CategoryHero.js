@@ -6,7 +6,7 @@ import { Box, Text, Flex, Grid, Button, Image } from '@64labs/ui'
 import { useQuery } from '../lib/gql'
 
 const categoryProductListQuery = gql`
-  query categoryHero($id: String!) {
+  query category($id: String!) {
     category: getCategory(id: $id) {
       id
       name

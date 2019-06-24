@@ -22,7 +22,6 @@ const cache = new InMemoryCache({
   cacheRedirects: {
     Query: {
       getCategory: (_, args, { getCacheKey }) => {
-        console.log(_, args)
         return getCacheKey({ __typename: 'Category', id: args.id })
       },
       getProduct: (_, args, { getCacheKey }) => {
@@ -30,13 +29,17 @@ const cache = new InMemoryCache({
       }
     },
     Product: {
-      category: _ => {
-        console.log('WTF')
+      category: (_, args) => {
+        console.log('WTF', _, args)
+        // return getCacheKey({ __typename: 'Category', id: args.id })
       }
     },
     Category: {
       id: () => console.log('id'),
-      name: () => console.log('id')
+      name: () => console.log('id'),
+      parentCategory: _ => {
+        console.log('SHIT!', _)
+      }
     }
   }
 })
@@ -46,6 +49,7 @@ function create(config = {}, initialState) {
     connectToDevTools: process.browser,
     ssrMode: !process.browser,
     cache: cache.restore(initialState || {}),
+    queryDeduplication: true,
     resolvers: {
       Mutation: {
         setSelectedProductId: (_root, variables, { cache, getCacheKey }) => {

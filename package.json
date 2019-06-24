@@ -15,7 +15,9 @@
     "apollo-cache-inmemory": "^1.6.0",
     "apollo-client": "^2.6.0",
     "apollo-datasource-rest": "^0.3.2",
+    "apollo-link-batch-http": "^1.2.12",
     "apollo-link-context": "^1.0.17",
+    "apollo-link-dedup": "^1.0.19",
     "apollo-link-http": "^1.5.14",
     "apollo-link-persisted-queries": "^0.2.2",
     "apollo-server": "^2.5.0",
@@ -23,6 +25,7 @@
     "casual": "^1.6.0",
     "cheerio": "^1.0.0-rc.2",
     "chokidar": "^2.1.2",
+    "dataloader": "^1.4.0",
     "deep-equal": "^1.0.1",
     "deepmerge": "^3.2.0",
     "emotion-icons": "^1.0.0",
@@ -50,7 +53,8 @@
     "react-dom": "^16.8.3",
     "react-spring": "^8.0.20",
     "styled-system": "^4.0.4",
-    "typeface-montserrat": "^0.0.54"
+    "typeface-montserrat": "^0.0.54",
+    "use-measure": "^0.2.2"
   },
   "scripts": {
     "dev": "now dev",

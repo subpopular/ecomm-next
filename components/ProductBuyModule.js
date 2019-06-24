@@ -1,22 +1,33 @@
 import React from 'react'
 import { Button, Box, Flex, Text, Image } from '@64labs/ui'
 import { useCart } from '../lib/hooks/useCart'
+import { useNotifications } from './Notification'
 import VariationSelector from './VariationSelector'
 import SelectorGrid from './SelectorGrid'
 
 const ProductBuyModule = ({ product, selections, variant }) => {
-  const [cartQuery, addToCart] = useCart()
+  const [_c, addToCart] = useCart()
+  const [_n, notifications] = useNotifications()
   const { size, color } = selections
+  const { category } = product
+  const parentCategory =
+    category && category.parentCategory && category.parentCategory !== 'root'
+      ? category.parentCategory
+      : null
+
   const price = variant ? variant.pricing.max.toFixed(2) : product.price.toFixed(2)
 
-  const categoryName = product.category ? product.category.name : null
-  const parentCategoryName = categoryName ? product.category.parentCategory.name : null
+  const handleAddToCart = () => {
+    // addToCart(variant.id)
+    notifications.add('Added to cart')
+  }
 
   return (
     <>
       <Box mb={3}>
         <Text mb={2} variant="caption">
-          {parentCategoryName} – {categoryName}
+          {parentCategory ? `${parentCategory.name} - ` : ''}
+          {category ? category.name : ''}
         </Text>
         <Text as="h1" variant="h2" mb={1}>
           {product.name}
@@ -83,12 +94,7 @@ const ProductBuyModule = ({ product, selections, variant }) => {
       </Box>
 
       <Flex mb={3}>
-        <Button
-          ml={[0, 'auto']}
-          width="100%"
-          disabled={!variant}
-          onClick={() => addToCart(variant.id)}
-        >
+        <Button ml={[0, 'auto']} width="100%" disabled={!variant} onClick={handleAddToCart}>
           Add
         </Button>
       </Flex>

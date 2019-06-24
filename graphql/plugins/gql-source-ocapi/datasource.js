@@ -1,9 +1,14 @@
 const { RESTDataSource } = require('apollo-datasource-rest')
+const DataLoader = require('dataloader')
 
-class LumensAPI extends RESTDataSource {
+class OCAPIDataSource extends RESTDataSource {
   constructor() {
     super()
     this.baseURL = 'https://staging-web-reitmans.demandware.net/s/Additionelle_CA/dw/shop/v18_8'
+    this.categoryLoader = new DataLoader(ids => {
+      console.log(ids)
+      return Promise.all(ids.map(id => this.getCategory(id)))
+    })
   }
 
   willSendRequest(request) {
@@ -90,18 +95,20 @@ class LumensAPI extends RESTDataSource {
     return await this.get(
       `/products/(${ids.join(
         ','
-      )})?expand=availability%2Cprices%2Cvariations%2Cpromotions%2Cimages%2Crecommendations%2Clinks%2Cset_products%2Coptions&locale=default&all_images=true`
+      )})?expand=availability%2Cprices%2Cvariations%2Cimages&locale=default&all_images=true`
     )
   }
 
   async getCategoryProductList(categoryId) {
-    const path = `/product_search?refine=cgid=${categoryId}&start=0&count=40&locale=default`
+    const path = `/product_search?refine=cgid=${categoryId}&start=0&count=20&locale=default`
     return await this.get(path)
   }
 
   async getCategory(id) {
-    return await this.get(`/categories/${id}?levels=3&locale=default`)
+    return await this.get(`/categories/${id}?levels=4&locale=default`, null, {
+      cacheOptions: { ttl: 60 }
+    })
   }
 }
 
-module.exports = LumensAPI
+module.exports = OCAPIDataSource
