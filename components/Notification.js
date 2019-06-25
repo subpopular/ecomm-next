@@ -1,13 +1,12 @@
 import React from 'react'
-import { useSpring, useTrail, animated } from 'react-spring'
+import { useSpring, animated } from 'react-spring'
 import { Flex, Box, Text } from '@64labs/ui'
-import useMeasure from 'use-measure'
 
 export const NotificationContext = React.createContext()
 
 export const notificationsReducer = (state, action) => {
   if (action.type === 'add') {
-    return state.concat(action.payload)
+    return [action.payload, ...state]
   }
 
   if (action.type === 'remove') {
@@ -43,37 +42,22 @@ export const NotificationsProvider = ({ children }) => {
 export const useNotifications = () => React.useContext(NotificationContext)
 
 const Notification = ({ children }) => {
-  const nodeRef = React.useRef()
-  const { height } = useMeasure(nodeRef)
-  const [outerStyles, innerStyles] = useTrail(2, {
-    from: { transform: `translateY(-15px)`, opacity: 0 },
+  const styles = useSpring({
+    from: { transform: `translateY(24px)`, opacity: 0 },
     to: { transform: `translateY(0px)`, opacity: 1 },
-    config: {
-      tension: 454,
-      friction: 36
-    }
+    config: { tension: 454, friction: 38 }
   })
 
   return (
-    <animated.div
-      style={{
-        opacity: outerStyles.opacity,
-        transform: outerStyles.transform,
-        overflow: 'hidden'
-      }}
-    >
-      <Box bg="primary" ref={nodeRef}>
-        <Box p={3}>
-          <animated.div style={{ opacity: innerStyles.opacity, transform: innerStyles.transform }}>
-            <Flex>
-              <Text variant="h6" color="#fff" mx="auto">
-                {children}
-              </Text>
-            </Flex>
-          </animated.div>
-        </Box>
-      </Box>
-    </animated.div>
+    <Box bg="primary" p={3}>
+      <animated.div style={{ opacity: styles.opacity, transform: styles.transform }}>
+        <Flex>
+          <Text variant="h6" color="#fff" mx="auto">
+            {children}
+          </Text>
+        </Flex>
+      </animated.div>
+    </Box>
   )
 }
 

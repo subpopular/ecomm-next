@@ -1,6 +1,8 @@
 import React from 'react'
+import { useSpring, useTrail, animated } from 'react-spring'
+import { Box, Flex, Text } from '@64labs/ui'
 import AppHeader from './AppHeader'
-import { Box, Flex } from '@64labs/ui'
+import NavDrawer from './NavDrawer'
 
 const Layout = ({ children }) => {
   return (
@@ -13,6 +15,7 @@ const Layout = ({ children }) => {
         }}
       >
         <AppHeader />
+        <NavDrawer />
         {children}
       </Box>
     </Flex>
