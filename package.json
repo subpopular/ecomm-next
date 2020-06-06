@@ -21,7 +21,7 @@
     "apollo-link-http": "^1.5.14",
     "apollo-link-persisted-queries": "^0.2.2",
     "apollo-server": "^2.5.0",
-    "apollo-server-micro": "^2.5.0",
+    "apollo-server-micro": "^2.14.2",
     "casual": "^1.6.0",
     "cheerio": "^1.0.0-rc.2",
     "chokidar": "^2.1.2",
