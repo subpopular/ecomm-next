@@ -39,7 +39,7 @@
     "is-mergeable-object": "^1.1.0",
     "isomorphic-unfetch": "^3.0.0",
     "kind-of": "^6.0.2",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "material-colors": "^1.2.6",
     "material-react-icons": "^4.0.0",
     "merge-deep": "^3.0.2",
