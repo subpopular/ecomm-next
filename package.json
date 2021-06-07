@@ -42,7 +42,7 @@
     "lodash": "^4.17.11",
     "material-colors": "^1.2.6",
     "material-react-icons": "^4.0.0",
-    "merge-deep": "^3.0.2",
+    "merge-deep": "^3.0.3",
     "micro": "^9.3.4",
     "micro-cors": "^0.1.1",
     "next": "^8.0.3",
